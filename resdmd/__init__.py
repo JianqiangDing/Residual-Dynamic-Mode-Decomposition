@@ -14,21 +14,14 @@ Usage examples:
     import resdmd
 
     # Core ResDMD algorithm
-    LAM, V, residuals, K = resdmd.resdmd_algorithm(PX, PY)
-
-    # Complete analysis with RBF features
-    LAM, V, residuals, K, PX, PY, centers = resdmd.resdmd_with_rbf_features(X, Y)
+    LAM, V, residuals = resdmd.resdmd(X, Y)
 
     # Compute pseudospectrum
     RES, RES2, V2 = resdmd.koop_pseudospec_qr(PX, PY, z_pts, W)
 """
 
 from .koop_pseudospec_qr import koop_pseudospec_qr
-from .resdmd_algorithm import (
-    analyze_eigenvalues,
-    resdmd_algorithm,
-    resdmd_with_rbf_features,
-)
+from .resdmd_algorithm import analyze_eigenvalues, resdmd, resdmd_algorithm
 
 # Define module version
 __version__ = "1.0.0"
@@ -37,7 +30,7 @@ __version__ = "1.0.0"
 __all__ = [
     "koop_pseudospec_qr",
     "resdmd_algorithm",
-    "resdmd_with_rbf_features",
+    "resdmd",
     "analyze_eigenvalues",
 ]
 
@@ -62,7 +55,7 @@ def get_module_info():
         "matlab_correspondence": {
             "koop_pseudospec_qr": "KoopPseudoSpecQR.m",
             "resdmd_algorithm": "Core ResDMD Algorithm 1",
-            "resdmd_with_rbf_features": "Complete ResDMD with RBF features",
+            "resdmd": "Core ResDMD Algorithm",
             "analyze_eigenvalues": "Eigenvalue analysis utilities",
         },
     }
