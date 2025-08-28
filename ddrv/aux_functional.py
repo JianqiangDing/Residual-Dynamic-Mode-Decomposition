@@ -9,13 +9,6 @@ import numpy as np
 import sympy as sp
 from scipy.integrate import odeint
 
-try:
-    import plotly.graph_objects as go
-
-    PLOTLY_AVAILABLE = True
-except ImportError:
-    PLOTLY_AVAILABLE = False
-
 # defination of dynamical systems ------------------------------------------------
 
 # define the NL_EIG system (2D nonlinear system with known eigenvalues and eigenfunctions)

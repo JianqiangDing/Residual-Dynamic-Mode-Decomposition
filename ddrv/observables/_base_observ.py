@@ -1,0 +1,56 @@
+import abc
+
+import numpy as np
+import sympy as sp
+
+from ._basis_function import _BaseBasisFunction
+
+
+class BaseObservable(abc.ABC):
+    """
+    Base class for all observables.
+
+    An observable is a function f(x): R^n -> R^m.
+    The structure of an observable is a vector of basis functions.
+    so, this class supports some operations on the basis functions.
+
+    """
+
+    def __init__(self, name: str, description: str, dim_in: int, dim_out: int):
+        self.name = name
+        self.description = description
+        self.dim_in = dim_in  # dimension of the input space
+        self.dim_out = dim_out  # dimension of the output space
+
+    def _init_symbols(self):
+        """
+        initialize the symbols for the variables of the observable function.
+        """
+        self._variables = sp.symbols(f"x_{1:self.dim_in}", real=True)
+
+    def _init_symbolic_expr(self):
+        """
+        initialize the symbolic expression of the observable function.
+        """
+        raise NotImplementedError  # this force all children to implement this method
+
+    def apply(self, x: np.ndarray) -> np.ndarray:
+        """
+        apply the observable function to an array of state variables of shape (n_samples, n_states)
+        and return an array of shape (n_samples,).
+        """
+        raise NotImplementedError  # this force all children to implement this method
+
+    def __str__(self) -> str:
+        """
+        get the string representation of the observable function.
+        How to use: print(obs) or str(obs)
+        """
+        raise NotImplementedError  # this force all children to implement this method
+
+    # override the __add__ method
+    def __add__(self, other: "BaseObservable") -> "BaseObservable":
+        """
+        add the observable function with another observable function.
+        """
+        raise NotImplementedError  # this force all children to implement this method
