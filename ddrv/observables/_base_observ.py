@@ -3,8 +3,6 @@ import abc
 import numpy as np
 import sympy as sp
 
-from ._basis_function import _BaseBasisFunction
-
 
 class BaseObservable(abc.ABC):
     """
@@ -26,7 +24,7 @@ class BaseObservable(abc.ABC):
         """
         initialize the symbols for the variables of the observable function.
         """
-        self._variables = sp.symbols(f"x_{1:self.dim_in}", real=True)
+        self.variables = sp.symbols(f"x:{self.dim_in}", real=True)
 
     def _init_symbolic_expr(self):
         """
@@ -53,4 +51,14 @@ class BaseObservable(abc.ABC):
         """
         add the observable function with another observable function.
         """
+        assert (
+            self.dim_in == other.dim_in
+        ), "the dimension of the input space must be the same"
+
+        name = f"{self.name} + {other.name}"
+        description = f"{self.description} + {other.description}"
+        dim_in = self.dim_in
+        dim_out = self.dim_out + other.dim_out
+        # TODO: implement the addition of the observable functions
+
         raise NotImplementedError  # this force all children to implement this method

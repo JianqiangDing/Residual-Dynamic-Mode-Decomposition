@@ -5,5 +5,6 @@ for basic observables, it is defined a scalar function of state variables (vecto
 """
 
 from .poly_observ import PolyObservable
+from .rbf_observ import RBFObservable
 
-__all__ = ["PolyObservable"]
+__all__ = ["PolyObservable", "RBFObservable"]

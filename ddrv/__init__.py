@@ -7,7 +7,7 @@ from .aux_functional import (
     visualize_scalar_function_3d_plotly,
     visualize_vector_field,
 )
-from .observables import PolyObservable
+from .observables import PolyObservable, RBFObservable
 from .resdmd import get_eigenpairs, resdmd
 
 __all__ = [
@@ -20,4 +20,5 @@ __all__ = [
     "visualize_eigenfunction_comparison_plotly",
     "get_eigenpairs",
     "PolyObservable",
+    "RBFObservable",
 ]
