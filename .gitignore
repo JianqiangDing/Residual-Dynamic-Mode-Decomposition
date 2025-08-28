@@ -326,3 +326,4 @@ secrets.yaml
 # OS generated files
 .directory
 Thumbs.db
+*.pdf

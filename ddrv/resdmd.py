@@ -68,15 +68,21 @@ def _rbf_observe_data(X, Y, observe_dict_params):
 
     num_centers = observe_dict_params["size"]
 
-    # find the RBF centers with kmeans (on input samples X of shape (n_samples, dim))
-    kmeans = KMeans(n_clusters=num_centers, random_state=0).fit(X)
+    # find the RBF centers with kmeans (on combined X and Y data to better cover the state space)
+    # Combine X and Y data to find centers that represent the full dynamical system trajectory
+    combined_data = np.vstack([X, Y])  # (2*n_samples, dim)
+    kmeans = KMeans(n_clusters=num_centers, random_state=0).fit(combined_data)
     centers = kmeans.cluster_centers_  # (num_centers, dim)
 
-    # compute a distance scale d using average point-to-center distances
-    # Distances matrix: (n_samples, num_centers)
+    # compute a distance scale d using average point-to-center distances from combined data
+    # This ensures the RBF scaling is appropriate for both X and Y data distributions
+    diff_combined = combined_data[:, None, :] - centers[None, :, :]
+    D_combined = np.linalg.norm(diff_combined, axis=2)
+    d = np.mean(D_combined) + 1e-12  # avoid division by zero
+
+    # Now compute individual distance matrices for X and Y
     diff = X[:, None, :] - centers[None, :, :]
     D = np.linalg.norm(diff, axis=2)
-    d = np.mean(D) + 1e-12  # avoid division by zero
 
     # build RBF feature matrices for all samples at once
     # PX[i, j] = exp(-||X_i - center_j|| / d)

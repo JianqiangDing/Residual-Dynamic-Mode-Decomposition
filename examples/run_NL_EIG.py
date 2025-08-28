@@ -11,6 +11,7 @@ import ddrv
 if __name__ == "__main__":
     # define the dynamical system
     dynamical_system = ddrv.NL_EIG_System()
+    print("dynamical_system", dynamical_system.get_dynamics())
 
     np.random.seed(1)
 
