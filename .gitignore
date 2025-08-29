@@ -25,7 +25,7 @@
 # MATLAB Code Generation
 codegen/
 slprj/
-
+*.png
 # MATLAB App Designer
 *.mlapp.bak
 
@@ -327,3 +327,4 @@ secrets.yaml
 .directory
 Thumbs.db
 *.pdf
+tests/vis_rv.png

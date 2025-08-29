@@ -54,3 +54,23 @@ class PolyObservable(BaseObservable):
         get the string representation of the polynomial observable.
         """
         return self.description
+
+    def eval_mod(self, x: np.ndarray, mod: np.ndarray) -> np.ndarray:
+        """
+        evaluate the polynomial observable with given mode on given data.
+        mod: (num_modes,num_coeffs_for_each_basis_observable)
+        x: (n_samples,n_states)
+        return: (n_samples,num_modes)
+        """
+        assert x.ndim == 2, "x must be a 2D array"
+        assert (
+            x.shape[1] == self.dim_in
+        ), "x must have the same number of columns as the number of variables"
+        assert mod.ndim == 2, "mod must be a 2D array"
+        assert (
+            mod.shape[1] == self.dim_out
+        ), "mod must have the same number of columns as the number of variables"
+
+        val_basis = self.apply(x)
+        ret = mod[None, :, :] * val_basis[:, None, :]
+        return ret.sum(axis=2)

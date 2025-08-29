@@ -1,10 +1,10 @@
-import abc
+from abc import ABC, abstractmethod
 
 import numpy as np
 import sympy as sp
 
 
-class BaseObservable(abc.ABC):
+class BaseObservable(ABC):
     """
     Base class for all observables.
 
@@ -26,25 +26,35 @@ class BaseObservable(abc.ABC):
         """
         self.variables = sp.symbols(f"x:{self.dim_in}", real=True)
 
+    @abstractmethod
     def _init_symbolic_expr(self):
         """
         initialize the symbolic expression of the observable function.
         """
-        raise NotImplementedError  # this force all children to implement this method
+        raise NotImplementedError
 
+    @abstractmethod
     def apply(self, x: np.ndarray) -> np.ndarray:
         """
         apply the observable function to an array of state variables of shape (n_samples, n_states)
         and return an array of shape (n_samples,).
         """
-        raise NotImplementedError  # this force all children to implement this method
+        raise NotImplementedError
 
+    @abstractmethod
     def __str__(self) -> str:
         """
         get the string representation of the observable function.
         How to use: print(obs) or str(obs)
         """
-        raise NotImplementedError  # this force all children to implement this method
+        raise NotImplementedError
+
+    @property
+    def shape(self) -> tuple:
+        """
+        get the shape of the observable function.
+        """
+        return (self.dim_in, self.dim_out)
 
     # override the __add__ method
     def __add__(self, other: "BaseObservable") -> "BaseObservable":
@@ -61,4 +71,14 @@ class BaseObservable(abc.ABC):
         dim_out = self.dim_out + other.dim_out
         # TODO: implement the addition of the observable functions
 
-        raise NotImplementedError  # this force all children to implement this method
+        raise NotImplementedError
+
+    @abstractmethod
+    def eval_mod(self, x: np.ndarray, mod: np.ndarray) -> np.ndarray:
+        """
+        evaluate the observable function with given mode on given data.
+
+        mod: (num_modes,num_coeffs_for_each_basis_observable)
+        x: (n_samples,n_states)
+        """
+        raise NotImplementedError

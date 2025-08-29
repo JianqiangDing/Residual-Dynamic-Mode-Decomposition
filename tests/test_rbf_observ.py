@@ -15,8 +15,12 @@ if __name__ == "__main__":
     # create a RBF observable
     c = np.random.rand(100, 5)
     r = np.random.rand(100)
-    rbf_observ = ddrv.RBFObservable(c, r)
-    print(rbf_observ)
+    rbf = ddrv.observables.RBFObservable(c, r)
+    print(rbf)
     data = np.random.rand(10000, 5)
-    val = rbf_observ.apply(data)
+    val = rbf.apply(data)
     print(val.shape)
+
+    mod = np.random.rand(33, rbf.dim_out)
+    val_mod = rbf.eval_mod(data, mod)
+    print(val_mod.shape)
