@@ -1,10 +1,11 @@
-# test the reachability verification of the NL_EIG system
+# test the reachability verification of the NL_EIG system with all the eigenpairs obtained from the data
+
 import os
 import sys
 
-import numpy as np
-
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
+import numpy as np
 
 import ddrv
 
@@ -47,67 +48,50 @@ if __name__ == "__main__":
     L, V, residuals, observables, PX, PY, K = ddrv.algo.resdmd(
         X, Y, observe_params={"basis": "poly", "degree": 9}
     )
-    idx = np.argsort(residuals)[:6]
-    principal_idx = idx[[1, 3]]
-    # get the principal modes based on the residuals
-    principal_lambdas_dt = L[principal_idx]  # which is discrete eigenvalues
-    # get the continuous principal eigenvalues
-    principal_lambdas_ct = np.log(principal_lambdas_dt) / DELTA_T
-    principal_modes = V[
-        :, principal_idx
-    ].T  # reshape it to (num_modes, num_of_basis_functions)
-    print(principal_modes.shape, "principal_modes")
-    print(principal_lambdas_dt, principal_lambdas_ct, dc_lambdas, "lambdas")
+
+    print(
+        L.shape,
+        V.shape,
+        residuals.shape,
+        observables.shape,
+    )
+
+    # define the threshold for the residuals
+    threshold = 1e-4  # CAUTION: but for larger threshold, the results are not good, like threshold = 1e-2, which is make sense in fact
+    # get the eigenvalues and eigenvectors with residuals less than the threshold
+    idx = np.where(residuals < threshold)[0]
+    print(idx, "idx")
+    L_feasible = L[idx]  #  these are discrete eigenvalues
+    # get the continuous eigenvalues
+    L_feasible_ct = np.log(L_feasible) / DELTA_T
+    V_feasible = V[:, idx].T
+    print(L_feasible.shape, V_feasible.shape)
+    print(L_feasible_ct, "L_feasible_ct")
 
     # --------------------------- 3. apply the reachability verification algorithm ---------------------------
     # define the initial set, and target set for reachability verification
     X0 = [[0, 0.1], [1.1, 1.2]]
     XF = [[1.8, 1.9], [-0.8, -0.7]]
 
-    pts_X0 = ddrv.common.sample_box_set(X0, 2000)
-    pts_XF = ddrv.common.sample_box_set(XF, 2000)
+    pts_X0 = ddrv.common.sample_box_set(X0, 5000)
+    pts_XF = ddrv.common.sample_box_set(XF, 5000)
     print(pts_X0.shape, pts_XF.shape)
 
-    # evaluate the principal modes on the initial set and target set samples
-    ef0_vals = observables.eval_mod(pts_X0, principal_modes)
-    efF_vals = observables.eval_mod(pts_XF, principal_modes)
+    # evaluate the eigenfunctions on the initial set and target set samples
+    ef0_vals = observables.eval_mod(pts_X0, V_feasible)
+    efF_vals = observables.eval_mod(pts_XF, V_feasible)
     print(ef0_vals.shape, efF_vals.shape)
 
-    # evaluate the ground truth eigenfunctions on the initial set and target set samples
-    eigF = NL_EIG.get_numerical_eigenfunctions()
-    ef0_vals_true = eigF(*pts_X0.T).squeeze().T
-    efF_vals_true = eigF(*pts_XF.T).squeeze().T
-    print(ef0_vals_true.shape, efF_vals_true.shape)
-
-    # # compute the reach time bounds
+    # compute the reach time bounds
     time_bounds, status = ddrv.algo.compute_reach_time_bounds(
-        ef0_vals_true, efF_vals_true, principal_lambdas_ct
+        ef0_vals, efF_vals, L_feasible_ct
     )
-    print(time_bounds, status)
-
-    T = time_bounds[0][1]
-    print(T, "T")
-
-    # get the trajectory data with computed reach time bounds
-    trajs, _ = ddrv.common.simulate(
-        NL_EIG.get_numerical_dynamics(),
-        pts_X0,
-        T_min=0,
-        T_max=T,
-        dt=DELTA_T,
-    )
-    print(trajs.shape)
-    # visualize the simulated trajectories
-    import matplotlib.pyplot as plt
-
-    for traj in trajs:
-        plt.plot(traj[:, 0], traj[:, 1], color="black", linewidth=0.5)
-    plt.show()
-    # visualize the reachability verification results
+    print(time_bounds, status, "time_bounds & status")
     ddrv.viz.vis_rv(
         NL_EIG.get_numerical_dynamics(),
         domain=[[-2, 2], [-2, 2]],
         bounds=time_bounds,
+        dt=0.01,
         initial_set=X0,
         target_set=XF,
     )

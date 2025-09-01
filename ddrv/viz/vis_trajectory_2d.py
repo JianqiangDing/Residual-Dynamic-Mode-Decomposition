@@ -11,7 +11,8 @@ def vis_trajectory_2d(trajectory):
     trajectory: np.ndarray, shape (num_steps,num_samples,dim)
     no return, just visualize the trajectory
     """
-    _, num_samples, _ = trajectory.shape
+    _, num_samples, dim = trajectory.shape
+    assert dim == 2, "the trajectory must be in 2D"
     plt.figure(figsize=(8, 6))
     for i in range(num_samples):
         plt.plot(

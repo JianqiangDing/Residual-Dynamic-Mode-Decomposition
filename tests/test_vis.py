@@ -10,7 +10,9 @@ import ddrv
 if __name__ == "__main__":
     dynamical_system = ddrv.dynamic.NL_EIG(lambda1=-1.0, lambda2=2.5)
     ddrv.viz.vis_vector_field_2d(
-        dynamical_system.get_numerical_dynamics(), domain=[-2, 2, -2, 2], step_size=0.1
+        dynamical_system.get_numerical_dynamics(),
+        domain=[[-2, 2], [-2, 2]],
+        step_size=0.1,
     )
 
     traj_data = ddrv.common.generate_trajectory_data(

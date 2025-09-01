@@ -30,7 +30,9 @@ def vis_vector_field_2d(dynamics, domain=[[-2, 2], [-2, 2]], step_size=0.1, show
                 V[i, j] = np.nan
 
     # plot streamlines
-    plt.figure(figsize=(12, 9))
+    px = 1 / plt.rcParams["figure.dpi"]
+    fig, ax = plt.subplots(figsize=(800 * px, 800 * px), layout="constrained")
+    fig.set_dpi(150)
 
     start_points = np.meshgrid(np.linspace(xmin, xmax, 20), np.linspace(ymin, ymax, 20))
     start_points = np.array([start_points[0].flatten(), start_points[1].flatten()]).T
@@ -59,4 +61,4 @@ def vis_vector_field_2d(dynamics, domain=[[-2, 2], [-2, 2]], step_size=0.1, show
         plt.show()
 
     # return the current figure handle
-    return plt.gcf()
+    return fig, ax

@@ -34,7 +34,4 @@ class DynamicalSystem(ABC):
         x_vars = sp.symbols(f"x:{self.dimension}")
         f_lambdified = sp.lambdify(x_vars, f_symbolic, "numpy")
 
-        def dynamics(t, x):
-            return np.array(f_lambdified(*x)).flatten()
-
-        return dynamics
+        return f_lambdified

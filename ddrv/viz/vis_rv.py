@@ -1,6 +1,7 @@
 # this functions is used to visualize the reachability verification results
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from ddrv.common import simulate
 from ddrv.common.sampling import sample_box_set
@@ -8,7 +9,7 @@ from ddrv.common.sampling import sample_box_set
 from .vis_vector_field_2d import vis_vector_field_2d
 
 
-def vis_rv(dynamics, domain, bounds, initial_set, target_set):
+def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
     """
     visualize the reachability verification results
 
@@ -19,18 +20,34 @@ def vis_rv(dynamics, domain, bounds, initial_set, target_set):
     """
 
     # visualize the vector field
-    fig = vis_vector_field_2d(dynamics, domain, show=False)
+    _, ax = vis_vector_field_2d(dynamics, domain, show=False)
     # get simulated trajectories within the computed reach-time bounds
 
-    # trajs_all, _ = simulate(
-    #     dynamics, sample_box_set(initial_set, 1000), bounds[0][0], bounds[0][1], 0.05
-    # )
+    trajs_all, t = simulate(
+        dynamics,
+        sample_box_set(initial_set, 1000),
+        0,
+        np.max(bounds),
+        dt,
+    )
+    # the shape of trajs_all is (num_steps, num_samples, dim)
+    num_steps, num_samples, dim = trajs_all.shape
 
     # add the simulated trajectories to the figure
-    for traj in trajs_all:
-        plt.plot(traj[:, 0], traj[:, 1], color="black", linewidth=0.5)
+    for i in range(num_samples):
+        ax.plot(trajs_all[:, i, 0], trajs_all[:, i, 1], color="black", linewidth=0.5)
 
-    # traj_within_bounds = simu
+    # get the trajectories within the bounds
+    for bound in bounds:
+        trajs_within_bounds = trajs_all[(t >= bound[0]) & (t <= bound[1])]
+        # plot the trajectories within the bounds in red
+        for i in range(num_samples):
+            ax.plot(
+                trajs_within_bounds[:, i, 0],
+                trajs_within_bounds[:, i, 1],
+                color="red",
+                linewidth=0.5,
+            )
 
     # add the initial set and target set to the figure as two rectangles with different colors without filling the inside
     from matplotlib.patches import Rectangle
@@ -47,7 +64,7 @@ def vis_rv(dynamics, domain, bounds, initial_set, target_set):
         facecolor="none",
         label="Initial Set",
     )
-    plt.gca().add_patch(initial_rect)
+    ax.add_patch(initial_rect)
 
     # draw the target set rectangle
     x_min, x_max = target_set[0]
@@ -61,12 +78,11 @@ def vis_rv(dynamics, domain, bounds, initial_set, target_set):
         facecolor="none",
         label="Target Set",
     )
-    plt.gca().add_patch(target_rect)
+    ax.add_patch(target_rect)
     # add the legend
-    plt.legend()
+    ax.legend()
     # add the title
     plt.title("Reachability Verification Results")
-    # add the x and y labels
-    # fig.show()
-    # save the figure
-    fig.savefig("vis_rv.png")
+
+    plt.tight_layout()
+    plt.show()
