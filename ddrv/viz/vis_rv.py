@@ -23,31 +23,36 @@ def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
     _, ax = vis_vector_field_2d(dynamics, domain, show=False)
     # get simulated trajectories within the computed reach-time bounds
 
-    trajs_all, t = simulate(
-        dynamics,
-        sample_box_set(initial_set, 1000),
-        0,
-        np.max(bounds),
-        dt,
-    )
-    # the shape of trajs_all is (num_steps, num_samples, dim)
-    num_steps, num_samples, dim = trajs_all.shape
+    # if bounds is empty, then skip the simulation
+    if len(bounds) > 0:
+        trajs_all, t = simulate(
+            dynamics,
+            sample_box_set(initial_set, 1000),
+            0,
+            np.max(bounds),
+            dt,
+        )
+        print("finshed simulation")
+        # the shape of trajs_all is (num_steps, num_samples, dim)
+        num_steps, num_samples, dim = trajs_all.shape
 
-    # add the simulated trajectories to the figure
-    for i in range(num_samples):
-        ax.plot(trajs_all[:, i, 0], trajs_all[:, i, 1], color="black", linewidth=0.5)
-
-    # get the trajectories within the bounds
-    for bound in bounds:
-        trajs_within_bounds = trajs_all[(t >= bound[0]) & (t <= bound[1])]
-        # plot the trajectories within the bounds in red
+        # add the simulated trajectories to the figure
         for i in range(num_samples):
             ax.plot(
-                trajs_within_bounds[:, i, 0],
-                trajs_within_bounds[:, i, 1],
-                color="red",
-                linewidth=0.5,
+                trajs_all[:, i, 0], trajs_all[:, i, 1], color="black", linewidth=0.5
             )
+
+        # get the trajectories within the bounds
+        for bound in bounds:
+            trajs_within_bounds = trajs_all[(t >= bound[0]) & (t <= bound[1])]
+            # plot the trajectories within the bounds in red
+            for i in range(num_samples):
+                ax.plot(
+                    trajs_within_bounds[:, i, 0],
+                    trajs_within_bounds[:, i, 1],
+                    color="red",
+                    linewidth=0.5,
+                )
 
     # add the initial set and target set to the figure as two rectangles with different colors without filling the inside
     from matplotlib.patches import Rectangle

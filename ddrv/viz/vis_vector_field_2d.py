@@ -13,33 +13,20 @@ def vis_vector_field_2d(dynamics, domain=[[-2, 2], [-2, 2]], step_size=0.1, show
     # create grid
     x = np.arange(xmin, xmax + step_size, step_size)
     y = np.arange(ymin, ymax + step_size, step_size)
+
     X, Y = np.meshgrid(x, y)
 
     # compute velocity field
-    U = np.zeros_like(X)
-    V = np.zeros_like(Y)
 
-    for i in range(X.shape[0]):
-        for j in range(X.shape[1]):
-            try:
-                dxdt = dynamics(0, [X[i, j], Y[i, j]])
-                U[i, j] = dxdt[0]
-                V[i, j] = dxdt[1]
-            except Exception:
-                U[i, j] = np.nan
-                V[i, j] = np.nan
+    dxdt = dynamics(X.flatten(), Y.flatten())
+    U, V = dxdt[0].reshape(X.shape), dxdt[1].reshape(Y.shape)
 
     # plot streamlines
     px = 1 / plt.rcParams["figure.dpi"]
     fig, ax = plt.subplots(figsize=(800 * px, 800 * px), layout="constrained")
     fig.set_dpi(150)
 
-    start_points = np.meshgrid(np.linspace(xmin, xmax, 20), np.linspace(ymin, ymax, 20))
-    start_points = np.array([start_points[0].flatten(), start_points[1].flatten()]).T
-
-    plt.streamplot(
-        X, Y, U, V, start_points=start_points, color="blue", linewidth=0.8, density=1.5
-    )
+    plt.streamplot(X, Y, U, V, color="blue", linewidth=0.8, density=1.5)
 
     # add contour lines of speed for context
     speed = np.sqrt(U**2 + V**2)
