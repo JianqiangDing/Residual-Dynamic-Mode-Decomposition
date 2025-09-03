@@ -10,8 +10,8 @@ import ddrv
 
 if __name__ == "__main__":
     # define the dynamical system
-    dynamical_system = ddrv.NL_EIG_System()
-    print("dynamical_system", dynamical_system.get_dynamics())
+    NL_EIG = ddrv.dynamic.NL_EIG()
+    print("dynamical_system", NL_EIG.get_dynamics())
 
     np.random.seed(1)
 
@@ -23,8 +23,8 @@ if __name__ == "__main__":
     NUM_STEPS = 50
 
     # generate the trajectory data
-    traj = ddrv.generate_trajectory_data(
-        dynamical_system,
+    traj = ddrv.common.generate_trajectory_data(
+        NL_EIG,
         num_samples=NUM_SAMPLES,
         num_steps=NUM_STEPS,
         delta_t=DT,
@@ -84,7 +84,7 @@ if __name__ == "__main__":
 
     # ------------------------------------------------------------
     # apply the ResDMD algorithm
-    LAM, V, residuals, basis_functions, PX, PY, K, x_symbols = ddrv.resdmd(
+    LAM, V, residuals, basis_functions, PX, PY, K, x_symbols = ddrv.algo.resdmd(
         X,
         Y,
         observe_dict_params={
@@ -106,7 +106,7 @@ if __name__ == "__main__":
 
     # ------------------------------------------------------------
 
-    eig_lam, eig_v, eig_residuals = ddrv.get_eigenpairs(PX, PY, 4)
+    eig_lam, eig_v, eig_residuals = ddrv.aux_functional.get_eigenpairs(PX, PY, 4)
 
     print("eig_lam", eig_lam.shape)
     print("eig_v", eig_v.shape)
@@ -117,7 +117,7 @@ if __name__ == "__main__":
 
     # ------------------------------------------------------------
     # from the computed discrete-time eigen values, compute the continuous-time eigen values
-    eig_lam_ct = dynamical_system.get_eigenvalues()
+    eig_lam_ct = NL_EIG.get_eigenvalues()
 
     print("eig_lam_ct", eig_lam_ct)
 

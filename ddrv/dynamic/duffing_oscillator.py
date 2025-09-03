@@ -1,4 +1,4 @@
-# definition of the van der pol system
+# definition of the duffing oscillator system
 
 from dataclasses import dataclass
 
@@ -9,9 +9,9 @@ from ._base_dynamic import DynamicalSystem
 
 
 @dataclass
-class Vanderpol(DynamicalSystem):
+class DuffingOscillator(DynamicalSystem):
     """
-    Vanderpol system class
+    Duffing oscillator system class
     """
 
     def __post_init__(self):
@@ -20,11 +20,10 @@ class Vanderpol(DynamicalSystem):
 
         # define the symbolic variables
         self.x = sp.symbols(f"x:{self.dimension}")
-        self.mu = 1.0
 
         # define the dynamical system
         self.f = sp.Matrix(
-            [self.x[1], self.mu * (1 - self.x[0] ** 2) * self.x[1] - self.x[0]]
+            [self.x[1], -0.5 * self.x[1] - self.x[0] * (self.x[0] ** 2 - 1)]
         )
 
     def get_dynamics(self):

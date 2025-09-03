@@ -148,6 +148,8 @@ def compute_reach_time_bounds(ef0_vals, efF_vals, lams, itol=1e-3):
 
     bound_mag = _reach_time_bounds_with_magnitude(ef0_vals, efF_vals, lams)
 
+    print(bound_mag, "bound_mag")
+
     # if all eigenvalues are real, then we skip the imaginary part
     if np.all(np.isreal(lams)):
         if (
