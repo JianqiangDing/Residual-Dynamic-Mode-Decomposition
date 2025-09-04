@@ -70,9 +70,12 @@ if __name__ == "__main__":
 
     # there are 2 eigenvalues are quite close to the actual discrete eigenvalues, the index is 1 and 3
     principal_idx = idx[[1, 3]]
-    principal_lambdas = L[principal_idx]
+    print(principal_idx)
+    principal_lambdas_dt = L[principal_idx]
     print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-    print("principal_lambdas", principal_lambdas)
+    print("principal_lambdas_dt", principal_lambdas_dt)
+    principal_lambdas_ct = np.log(principal_lambdas_dt) / DT
+    print("principal_lambdas_ct", principal_lambdas_ct)
     print("dc_lambdas", dc_lambdas)
     print("residuals", residuals[principal_idx])
     # get the corresponding eigenvectors
@@ -105,8 +108,10 @@ if __name__ == "__main__":
         Z_true[:, 0], Z_learned[:, 0]
     )
     print("scaling_factor_1", scaling_factor_1)
-    # compute the absolute difference of the first principal mode
-    error_1 = np.abs(Z_true[:, 0] - scaling_factor_1 * Z_learned[:, 0])
+    # compute the relative absolute difference of the first principal mode
+    error_1 = np.abs(Z_true[:, 0] - scaling_factor_1 * Z_learned[:, 0]) / np.abs(
+        Z_true[:, 0]
+    )
     print(np.max(error_1))
 
     # regarding the second principal mode, we can estimate the scaling factor
@@ -114,8 +119,10 @@ if __name__ == "__main__":
         Z_true[:, 1], Z_learned[:, 1]
     )
     print("scaling_factor_2", scaling_factor_2)
-    # compute the absolute difference of the second principal mode
-    error_2 = np.abs(Z_true[:, 1] - scaling_factor_2 * Z_learned[:, 1])
+    # compute the relative absolute difference of the second principal mode
+    error_2 = np.abs(Z_true[:, 1] - scaling_factor_2 * Z_learned[:, 1]) / np.abs(
+        Z_true[:, 1]
+    )
     print(np.max(error_2))
 
     # visualize the distribution of the errors on the domain in two subplots
@@ -126,7 +133,9 @@ if __name__ == "__main__":
     # first principal mode error
     scatter1 = ax1.scatter(X, Y, c=error_1, cmap="viridis")
     ax1.set_title(
-        "Absolute Error of $\lambda_1 = {:.2f}$".format(np.real(principal_lambdas[0]))
+        "Absolute Error of $\lambda_1 = {:.3f}$".format(
+            np.real(principal_lambdas_ct[0])
+        )
     )
     ax1.set_xlabel("x")
     ax1.set_ylabel("y")
@@ -135,7 +144,9 @@ if __name__ == "__main__":
     # second principal mode error
     scatter2 = ax2.scatter(X, Y, c=error_2, cmap="viridis")
     ax2.set_title(
-        "Absolute Error of $\lambda_2 = {:.2f}$".format(np.real(principal_lambdas[1]))
+        "Absolute Error of $\lambda_2 = {:.3f}$".format(
+            np.real(principal_lambdas_ct[1])
+        )
     )
     ax2.set_xlabel("x")
     ax2.set_ylabel("y")
