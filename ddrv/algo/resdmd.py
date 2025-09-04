@@ -6,7 +6,7 @@ Reference: Algorithm 2 in the paper "Rigorous data-driven computation of spectra
 import numpy as np
 import sympy as sp
 
-from ..common import transform_data
+from ..common.transform_data import transform_data
 
 
 def resdmd(X, Y, observe_params={"basis": "poly", "degree": 2}):

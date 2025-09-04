@@ -11,8 +11,9 @@ def generate_trajectory_data(
     dynamical_system,
     num_samples: int = 1000,
     num_steps: int = 10,
-    delta_t: float = 0.05,
+    dt: float = 0.05,
     domain: Optional[List[Tuple[float, float]]] = None,
+    random_seed: Optional[int] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     generate the trajectory data
@@ -21,12 +22,15 @@ def generate_trajectory_data(
         dynamical_system: the dynamical system object
         num_samples: the number of trajectories
         num_steps: the number of time steps per trajectory
-        delta_t: the time step
+        dt: the time step
         domain: the domain of the initial conditions (min_val, max_val), if None then use (-1, 1)
-
+        random_seed: the random seed
     Returns:
         Tuple[np.ndarray, np.ndarray]: (X, Y) data pairs, X is the current state, Y is the next state
     """
+    if random_seed is not None:
+        np.random.seed(random_seed)
+
     if domain is None:
         # domain should be an array of shape (dimension, 2), each row is the min and max of the domain for each dimension
         domain = np.array([(-1, 1)] * dynamical_system.dimension)
@@ -61,7 +65,7 @@ def generate_trajectory_data(
 
     # Small burn-in to avoid t=0
     T_min = 1e-8
-    steps_init = int(np.ceil(T_min / delta_t)) if T_min > 0 else 0
+    steps_init = int(np.ceil(T_min / dt)) if T_min > 0 else 0
     if steps_init > 0:
         x_init = odeint(
             ode_fx, Y0_batch.T.flatten(), np.linspace(0.0, T_min, steps_init)
@@ -72,14 +76,14 @@ def generate_trajectory_data(
 
     # March forward for num_steps steps with small internal solver grid
     traj = [X_cur]  # list of (num_samples, dim)
-    t_small = np.linspace(0.0, delta_t, 5)
+    t_small = np.linspace(0.0, dt, 5)
     for _ in range(num_steps):
         x_next = odeint(ode_fx, X_cur.flatten(), t_small)[-1].reshape(num_samples, dim)
         traj.append(x_next)
         X_cur = x_next
 
     print(
-        f"generated {num_samples} trajectories in batch (odeint), {num_steps} steps, {delta_t} time step..."
+        f"generated {num_samples} trajectories in batch (odeint), {num_steps} steps, {dt} time step..."
     )
 
     return np.stack(traj)

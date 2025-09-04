@@ -13,7 +13,7 @@ if __name__ == "__main__":
     # set the seed for reproducibility
     np.random.seed(42)
 
-    DELTA_T = 0.05
+    DT = 0.05
     # define the dynamical system
     NL_EIG = ddrv.dynamic.NL_EIG(lambda1=-1.0, lambda2=2.5)
     # ddrv.viz.vis_vector_field_2d(
@@ -25,14 +25,14 @@ if __name__ == "__main__":
         NL_EIG,
         num_samples=1000,
         num_steps=10,
-        delta_t=DELTA_T,
+        dt=DT,
         domain=[[-2, 2], [-2, 2]],
     )
     print(traj_data.shape)
     # traj_data is a 3D array, shape (num_steps, num_samples, dim)
 
     # based on the settings, the discrete eigenvalues are:
-    dc_lambdas = np.exp(np.array([-1.0, 2.5]) * DELTA_T)
+    dc_lambdas = np.exp(np.array([-1.0, 2.5]) * DT)
     print("dc_lambdas", dc_lambdas)
 
     # now split the trajectory data into X and Y arrays, X refers the current state, Y refers the next state
