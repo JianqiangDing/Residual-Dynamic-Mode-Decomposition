@@ -38,9 +38,7 @@ def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
 
         # add the simulated trajectories to the figure
         for i in range(num_samples):
-            ax.plot(
-                trajs_all[:, i, 0], trajs_all[:, i, 1], color="black", linewidth=0.5
-            )
+            ax.plot(trajs_all[:, i, 0], trajs_all[:, i, 1], color="gray", linewidth=0.5)
 
         # get the trajectories within the bounds
         for bound in bounds:

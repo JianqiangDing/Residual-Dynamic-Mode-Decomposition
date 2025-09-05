@@ -38,4 +38,6 @@ def get_principal_eigenmodes(
     # get the most closest eigenvalues to the given principal eigenvalues
     principal_modes = V[:, principal_idx].T
 
+    print(L_ct[principal_idx], "L_ct[principal_idx]")
+
     return principal_modes, observables, residuals[principal_idx]

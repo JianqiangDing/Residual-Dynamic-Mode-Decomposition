@@ -28,6 +28,9 @@ def get_principal_eigenvalues(
     Returns:
         principal_eigenvalues_dt: the principal eigenvalues in the discrete time
         principal_eigenvalues_ct: the principal eigenvalues in the continuous time
+
+
+    TODO: refine this function with functionis from PyDMD
     """
     # generate the trajectory around the equilibrium point
     domain = [
@@ -41,12 +44,10 @@ def get_principal_eigenvalues(
     # now split the trajectory data into X and Y arrays, X refers the current state, Y refers the next state
     X = trajectory[:-1, :, :].reshape(-1, 2)
     Y = trajectory[1:, :, :].reshape(-1, 2)
-    print(X.shape, Y.shape)
 
     # here we assume that the behavior of the system is linear around the equilibrium point
     # so we can use the solve the linear least square problem to get the approximation of the koopman operator
     K = np.linalg.lstsq(X, Y, rcond=None)[0]
-    print(K.shape)
 
     # get the discrete eigenvalues of the koopman operator
     LAM_dt = np.linalg.eig(K)[0]
