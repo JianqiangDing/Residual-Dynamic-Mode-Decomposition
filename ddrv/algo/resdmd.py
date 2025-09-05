@@ -18,7 +18,6 @@ def resdmd(X, Y, observe_params={"basis": "poly", "degree": 2}):
 
     # compute the residuals
     # residuals = || PY*v_j - PX*v_j*lam_j || / || PX*v_j ||
-    print("PX.shape, V.shape", PX.shape, V.shape)
     PXV = PX @ V
     PYV = PY @ V
 
