@@ -20,7 +20,7 @@ if __name__ == "__main__":
         dt=0.01,
         num_samples=1000,
         num_steps=10,
-        observe_params={"basis": "poly", "degree": 14},
+        observe_params={"basis": "poly", "degree": 15},
         random_seed=0,
     )
     # print(LAM, "LAM")
@@ -37,7 +37,7 @@ if __name__ == "__main__":
         dt=0.01,
         num_samples=1000,
         num_steps=10,
-        observe_params={"basis": "poly", "degree": 10},
+        observe_params={"basis": "poly", "degree": 14},
         random_seed=0,
     )
     # print(LAM, "LAM")
