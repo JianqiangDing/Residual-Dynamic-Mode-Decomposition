@@ -4,7 +4,6 @@ Reference: Algorithm 2 in the paper "Rigorous data-driven computation of spectra
 """
 
 import numpy as np
-import sympy as sp
 
 from ..common.transform_data import transform_data
 
