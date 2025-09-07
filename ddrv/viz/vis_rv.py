@@ -2,6 +2,7 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.patches import Rectangle
 
 from ddrv.common import simulate
 from ddrv.common.sampling import sample_box_set
@@ -48,12 +49,12 @@ def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
                 ax.plot(
                     trajs_within_bounds[:, i, 0],
                     trajs_within_bounds[:, i, 1],
-                    color="red",
+                    color="green",
                     linewidth=0.5,
+                    alpha=0.1,
                 )
 
     # add the initial set and target set to the figure as two rectangles with different colors without filling the inside
-    from matplotlib.patches import Rectangle
 
     # draw the initial set rectangle
     x_min, x_max = initial_set[0]
@@ -66,6 +67,7 @@ def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
         edgecolor="red",
         facecolor="none",
         label="Initial Set",
+        zorder=10,
     )
     ax.add_patch(initial_rect)
 
@@ -80,6 +82,7 @@ def vis_rv(dynamics, domain, bounds, dt, initial_set, target_set):
         edgecolor="blue",
         facecolor="none",
         label="Target Set",
+        zorder=10,
     )
     ax.add_patch(target_rect)
     # add the legend

@@ -198,7 +198,7 @@ def compute_reach_time_bounds(ef0_vals, efF_vals, lams, itol=1e-3):
         if bound_img.lower < 0:
             min_shift = np.ceil(-float(bound_img.lower) / period) * period
             return [(bound_img.lower + min_shift, bound_img.upper + min_shift)], (
-                "PROBABLY REACHABLE",
+                "PROBABLY PERIODICALLY REACHABLE",  # in this case, it means periodically reachable
                 period,
             )
 

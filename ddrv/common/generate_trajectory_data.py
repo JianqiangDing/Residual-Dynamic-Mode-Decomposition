@@ -14,6 +14,7 @@ def generate_trajectory_data(
     dt: float = 0.05,
     domain: Optional[List[Tuple[float, float]]] = None,
     random_seed: Optional[int] = None,
+    forward: bool = True,
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     generate the trajectory data
@@ -25,6 +26,7 @@ def generate_trajectory_data(
         dt: the time step
         domain: the domain of the initial conditions (min_val, max_val), if None then use (-1, 1)
         random_seed: the random seed
+        forward: if True, then generate the trajectory data from the initial state to the next state, otherwise generate the trajectory data from the next state to the initial state
     Returns:
         Tuple[np.ndarray, np.ndarray]: (X, Y) data pairs, X is the current state, Y is the next state
     """
@@ -51,6 +53,9 @@ def generate_trajectory_data(
 
     # Vectorized dynamics from symbolic definition
     f_symbolic = dynamical_system.get_dynamics()
+    # if not forward, then negate the dynamics
+    if not forward:
+        f_symbolic = -f_symbolic
     x_vars = sp.symbols(f"x:{dim}")
     f_vec = sp.lambdify(x_vars, f_symbolic, "numpy")
 

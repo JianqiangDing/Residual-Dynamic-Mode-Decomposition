@@ -26,7 +26,6 @@ class BaseObservable(ABC):
         """
         self.variables = sp.symbols(f"x:{self.dim_in}", real=True)
 
-    @abstractmethod
     def _init_symbolic_expr(self):
         """
         initialize the symbolic expression of the observable function.
@@ -55,23 +54,6 @@ class BaseObservable(ABC):
         get the shape of the observable function.
         """
         return (self.dim_in, self.dim_out)
-
-    # override the __add__ method
-    def __add__(self, other: "BaseObservable") -> "BaseObservable":
-        """
-        add the observable function with another observable function.
-        """
-        assert (
-            self.dim_in == other.dim_in
-        ), "the dimension of the input space must be the same"
-
-        name = f"{self.name} + {other.name}"
-        description = f"{self.description} + {other.description}"
-        dim_in = self.dim_in
-        dim_out = self.dim_out + other.dim_out
-        # TODO: implement the addition of the observable functions
-
-        raise NotImplementedError
 
     @abstractmethod
     def eval_mod(self, x: np.ndarray, mod: np.ndarray) -> np.ndarray:

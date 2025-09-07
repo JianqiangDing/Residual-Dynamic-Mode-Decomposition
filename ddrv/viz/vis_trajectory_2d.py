@@ -22,4 +22,15 @@ def vis_trajectory_2d(trajectory):
             linewidth=0.5,
             alpha=0.5,
         )
+    # mark all start points
+    plt.scatter(
+        trajectory[0, :, 0],
+        trajectory[0, :, 1],
+        c="green",
+        s=20,
+        alpha=0.7,
+        label="start point",
+    )
+
+    plt.tight_layout()
     plt.show()
