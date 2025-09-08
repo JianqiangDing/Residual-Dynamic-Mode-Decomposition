@@ -68,8 +68,8 @@ def presdmd(
     # select the first k eigenmodes based on the singular values of R
     idx = P[:k]
 
-    # with the selected indices, we can get the principal eigenmodes
-    V = V[:, idx]
-    LAM = LAM[idx]
+    # with the selected indices, we can get the principal eigenpairs (discrete eigenvalues)
+    principal_eigenmods = V[:, idx].T
+    LAM_dt = LAM[idx]
 
-    return LAM, V, residuals[idx], observables, PX, PY, K
+    return LAM_dt, principal_eigenmods, residuals[idx], observables, PX, PY, K

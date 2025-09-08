@@ -148,7 +148,7 @@ def compute_reach_time_bounds(ef0_vals, efF_vals, lams, itol=1e-3):
 
     bound_mag = _reach_time_bounds_with_magnitude(ef0_vals, efF_vals, lams)
 
-    print(bound_mag, "bound_mag")
+    print(bound_mag, ">>>> bound_mag")
 
     # if all eigenvalues are real, then we skip the imaginary part
     if np.all(np.isreal(lams)):
@@ -174,6 +174,8 @@ def compute_reach_time_bounds(ef0_vals, efF_vals, lams, itol=1e-3):
     bound_img, img_pos, img_neg = _reach_time_bounds_with_imaginary(
         ef0_vals, efF_vals, lams
     )
+
+    print(bound_img, ">>>> bound_img")
 
     if (
         bound_mag.empty
