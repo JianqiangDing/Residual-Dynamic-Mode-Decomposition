@@ -25,12 +25,14 @@ class DynamicalSystem(ABC):
         """
         raise NotImplementedError
 
-    def get_numerical_dynamics(self) -> Callable:
+    def get_numerical_dynamics(self, forward: bool = True) -> Callable:
         """
         get the numerical dynamics function, for numerical integration
         """
         # convert the symbolic expression to a numerical function
         f_symbolic = self.get_dynamics()
+        if not forward:
+            f_symbolic = -f_symbolic
         x_vars = sp.symbols(f"x:{self.dimension}")
         f_lambdified = sp.lambdify(x_vars, f_symbolic, "numpy")
 

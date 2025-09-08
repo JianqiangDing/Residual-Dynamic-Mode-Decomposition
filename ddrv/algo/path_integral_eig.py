@@ -1,1 +1,1 @@
-# this function is used to compute the path integral eigenvalue of the system
+# this function for path integral method for eigenfunctions computation

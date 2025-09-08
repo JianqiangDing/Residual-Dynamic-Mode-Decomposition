@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .generate_trajectory_data import generate_trajectory_data
+from .generate_trajectory_from_domain import generate_trajectory_from_domain
 
 
 def get_principal_eigenvalues(
@@ -37,7 +37,7 @@ def get_principal_eigenvalues(
         [equilibrium[0] - radius, equilibrium[0] + radius],
         [equilibrium[1] - radius, equilibrium[1] + radius],
     ]
-    trajectory = generate_trajectory_data(
+    trajectory = generate_trajectory_from_domain(
         dynamic, num_samples, num_steps, dt, domain, random_seed
     )
 

@@ -9,7 +9,8 @@ from ..common.transform_data import transform_data
 
 
 def resdmd(X, Y, observe_params={"basis": "poly", "degree": 2}):
-    PX, PY, observables = transform_data(X, Y, observe_params)
+    PX, observables = transform_data(X, observe_params)
+    PY, observables = transform_data(Y, observe_params)
     K = np.linalg.lstsq(PX, PY, rcond=None)[0]
 
     # compute the eigenvalues and eigenvectors of the koopman operator

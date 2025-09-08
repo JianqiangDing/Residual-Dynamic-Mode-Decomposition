@@ -1,7 +1,8 @@
 # this folder is for common functions
 from .estimate_scaling_factor import estimate_scaling_factor
 from .find_closet_subset_index import find_closet_subset_index
-from .generate_trajectory_data import generate_trajectory_data
+from .generate_trajectory_from_domain import generate_trajectory_from_domain
+from .generate_trajectory_from_points import generate_trajectory_from_points
 from .get_eigenpairs import get_eigenpairs
 from .get_principal_eigenmodes import get_principal_eigenmodes
 from .get_principal_eigenvalues import get_principal_eigenvalues
@@ -11,7 +12,8 @@ from .simulate import simulate
 from .transform_data import transform_data
 
 __all__ = [
-    "generate_trajectory_data",
+    "generate_trajectory_from_domain",
+    "generate_trajectory_from_points",
     "find_closet_subset_index",
     "transform_data",
     "estimate_scaling_factor",
