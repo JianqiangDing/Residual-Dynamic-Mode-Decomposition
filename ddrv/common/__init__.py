@@ -6,8 +6,9 @@ from .generate_trajectory_from_points import generate_trajectory_from_points
 from .get_eigenpairs import get_eigenpairs
 from .get_principal_eigenmodes import get_principal_eigenmodes
 from .get_principal_eigenvalues import get_principal_eigenvalues
+from .kd_tree import kdtree, knn, knn_query, rnn, rnn_query
 from .linear_fractional_programming import linear_fractional_programming
-from .sampling import sample_box_set, sample_level_set
+from .sampling import sample_box_set, sample_level_set, sample_rnn_from_points
 from .simulate import simulate
 from .transform_data import transform_data
 
@@ -24,4 +25,10 @@ __all__ = [
     "sample_box_set",
     "sample_level_set",
     "simulate",
+    "kdtree",
+    "rnn",
+    "rnn_query",
+    "knn",
+    "knn_query",
+    "sample_rnn_from_points",
 ]

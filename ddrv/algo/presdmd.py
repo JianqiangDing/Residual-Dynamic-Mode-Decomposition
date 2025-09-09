@@ -70,6 +70,5 @@ def presdmd(
 
     # with the selected indices, we can get the principal eigenpairs (discrete eigenvalues)
     principal_eigenmods = V[:, idx].T
-    LAM_dt = LAM[idx]
 
-    return LAM_dt, principal_eigenmods, residuals[idx], observables, PX, PY, K
+    return LAM, principal_eigenmods, residuals[idx], observables, PX, PY, K
