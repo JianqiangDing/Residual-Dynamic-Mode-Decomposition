@@ -42,7 +42,6 @@ def presdmd(
     LAM_ct = np.log(LAM) / dt
     idx = np.where((residuals < thresh_res) & (np.abs(LAM_ct) > thresh_ct))[0]
     LAM = LAM[idx]
-
     V = V[:, idx]
 
     # now we using qr decomposition to get the principal eigenmodes
@@ -71,4 +70,4 @@ def presdmd(
     # with the selected indices, we can get the principal eigenpairs (discrete eigenvalues)
     principal_eigenmods = V[:, idx].T
 
-    return LAM, principal_eigenmods, residuals[idx], observables, PX, PY, K
+    return LAM[idx], principal_eigenmods, residuals[idx], observables, PX, PY, K
